@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gesture Recognition</title>
+    <style>
+        body {
+            text-align: center;
+            background: #111;
+            color: white;
+            font-family: Arial;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .start { background: green; color: white; }
+        .stop { background: red; color: white; }
+        #gestureText {
+            font-size: 30px;
+            margin-top: 20px;
+            color: cyan;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🤖 Hand Gesture Recognition</h1>
+
+<img id="videoFeed" src="" width="700"
+     style="border:5px solid green; border-radius:10px;">
+
+<br>
+
+<button class="start" onclick="startCamera()">Start</button>
+<button class="stop" onclick="stopCamera()">Stop</button>
+
+<div id="gestureText">Gesture: None</div>
+
+<script>
+function startCamera() {
+    fetch('/start');
+    document.getElementById("videoFeed").src = "/video";
+}
+
+function stopCamera() {
+    fetch('/stop');
+    document.getElementById("videoFeed").src = "";
+}
+
+// Update gesture text every second
+setInterval(() => {
+    fetch('/get_text')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("gestureText").innerText =
+            "Gesture: " + data.text;
+    });
+}, 1000);
+</script>
+
+</body>
+</html>
